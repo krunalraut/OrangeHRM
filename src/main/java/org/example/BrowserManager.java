@@ -20,20 +20,22 @@ import java.util.concurrent.TimeUnit;
 public class BrowserManager extends Util
 {
    public static  LoadProp loadProp = new LoadProp();
-    boolean soucelab = Boolean.parseBoolean(loadProp.getProperty("saucelab"));
+    boolean soucelab = true; //Boolean.parseBoolean(loadProp.getProperty("saucelab"));
 
     public static final String USERNAME = loadProp.getProperty("USERNAME");//"krunal1";
     public static final String ACCESS_KEY =loadProp.getProperty("ACCESSKEY");
    //public static final String URL ="http://"+userName+":"+ACCESS_KEY+"@ondemand.us-west-1.saucelabs.com:443/wd/hub";
-    //public static final String URL="https://krunal1:da54e79c-ef66-4dbc-9014-04554f7bb0d4@ondemand.us-west-1.saucelabs.com:443/wd/hub";
-    public static final String URL="https://"+USERNAME+":"+ACCESS_KEY+"@ondemand.us-west-1.saucelabs.com:443/wd/hub";
+    public static final String URL="https://krunal1:da54e79c-ef66-4dbc-9014-04554f7bb0d4@ondemand.us-west-1.saucelabs.com:443/wd/hub";
+    //public static final String URL="https://"+USERNAME+":"+ACCESS_KEY+"@ondemand.us-west-1.saucelabs.com:443/wd/hub";
      public void setBrowser()
     {
         String browser = loadProp.getProperty("browser");
-        if(soucelab) {
+        if(soucelab)
+        {
             System.out.println("Testcases is running in soucelab .....................");
             //running in remote chrome browser
-            if (browser.equalsIgnoreCase("chrome")) {
+            if (browser.equalsIgnoreCase("chrome"))
+            {
                 MutableCapabilities sauceOptions = new MutableCapabilities();
                 //DesiredCapabilities caps = DesiredCapabilities.chrome();
                 ChromeOptions caps = new ChromeOptions();
@@ -64,16 +66,19 @@ public class BrowserManager extends Util
             }
             //running testcases in remote firefox browser
             else if(browser.equalsIgnoreCase("firefox"))
-            {
-                MutableCapabilities sauceOptions = new MutableCapabilities();
+          {
+              MutableCapabilities sauceOptions = new MutableCapabilities();
+              DesiredCapabilities browserOptions = DesiredCapabilities.firefox();
+             // FirefoxOptions browserOptions = new FirefoxOptions();
+              browserOptions.setCapability("platformName", "Windows 10");
+              browserOptions.setCapability("browserVersion", "79.0");
+              browserOptions.setCapability("sauce:options", sauceOptions);
 
-                FirefoxOptions browserOptions = new FirefoxOptions();
-                browserOptions.setCapability("platformName", "Windows 8.1");
-                browserOptions.setCapability("sauce:options", sauceOptions);
-//                DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
-//               //FirefoxOptions browserOptions = new FirefoxOptions();
-//                caps.setCapability("platformName", "Windows 10");
-//                caps.setCapability("browserVersion", "79.0");
+
+
+//               FirefoxOptions caps = new FirefoxOptions();
+//               caps.setCapability("platformName", "Windows 10");
+//               caps.setCapability("browserVersion", "79.0");
 //                //browserOptions.setCapability("sauce:options", sauceOptions);
 
                 try {
@@ -101,6 +106,7 @@ public class BrowserManager extends Util
             else {
                 System.out.println("you have enter wrong browser");
             }
+            driver.manage().timeouts().implicitlyWait(30,TimeUnit.SECONDS);
             driver.manage().window().maximize();
             driver.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login");
 
